@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: ai-text-detector
+    runtime: python
+    plan: standard            # torch + model needs more than the 512MB free tier
+    buildCommand: pip install -r requirements.txt && python download_model.py
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: HF_HOME
+        value: /opt/render/project/src/.hf_cache
